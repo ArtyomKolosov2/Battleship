@@ -1,6 +1,6 @@
 ﻿using Battleship.Core.Input;
 using Battleship.Core.ValueObjects;
-using Battleship.Core.ValueObjects.Common;
+using Battleship.Shared;
 
 namespace Battleship.ConsoleApplication;
 
@@ -9,31 +9,52 @@ public class BattleshipConsoleInput : IBattleshipInput
     public Coordinates GetCoordinatesFromUser()
     {
         Console.WriteLine("Please input coordinates:");
-        string? input = null;
         Coordinates? parsedCoordinates = null;
         
-        while (input is null && parsedCoordinates is null)
+        while (parsedCoordinates is null)
         {
-            input = Console.ReadLine();
-            parsedCoordinates = input is not null ? ParseCoordinatesFromUserInput(input) : null;
+            var input = Console.ReadLine();
+            var parseResult = ParseCoordinatesFromUserInput(input);
+            
+            if (parseResult.IsSuccess)
+                parsedCoordinates = parseResult.Data;
+            else
+                Console.WriteLine(parseResult.Error);
         }
 
-        return parsedCoordinates!;
+        return parsedCoordinates;
     }
 
-    private static Coordinates? ParseCoordinatesFromUserInput(string input)
+    private static Result<Coordinates, string> ParseCoordinatesFromUserInput(string? input)
     {
+        if (string.IsNullOrWhiteSpace(input))
+            return Result<Coordinates, string>.Failure("Provided input is empty.");
+        
+        if (input.Length < 2)
+            return Result<Coordinates, string>.Failure("Provided string is shorter then expected.");
+        
         input = input.ToLower();
         
         var columnChar = input[0];
-        var rowChar = input[1];
+        var rowString = input[1..];
 
+        var isColumnCharInAllowedRange = columnChar is >= 'a' and <= 'j';
+        if (!isColumnCharInAllowedRange)
+            return Result<Coordinates, string>.Failure("Invalid column symbol.");
+        
         var column = Math.Abs('a' - columnChar);
-        var isRowCanBeParsedSuccessfully = char.IsDigit(rowChar);
+        var isRowCanBeParsedSuccessfully = rowString.All(char.IsDigit);
 
         if (!isRowCanBeParsedSuccessfully)
-            return null;
+            return Result<Coordinates, string>.Failure("Row isn't a number.");
 
-        return new Coordinates((int)char.GetNumericValue(rowChar) - 1, column);
+        var rowValue = int.Parse(rowString) - 1;
+
+        return rowValue switch
+        {
+            > 10 => Result<Coordinates, string>.Failure("Row number exceeds max allowed rows."),
+            < 0 => Result<Coordinates, string>.Failure("Row number is under first row."),
+            _ => Result<Coordinates, string>.Success(new Coordinates(rowValue, column))
+        };
     }
 }

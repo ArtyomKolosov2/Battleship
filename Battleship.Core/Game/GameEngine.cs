@@ -1,9 +1,10 @@
 ﻿using Battleship.Core.Input;
-using Battleship.Core.Models;
 using Battleship.Core.Models.Abstractions;
 using Battleship.Core.Output;
 using Battleship.Core.ValueObjects;
+using Battleship.Core.ValueObjects.Error;
 using Battleship.Core.ValueObjects.Shot;
+using Battleship.Shared;
 
 namespace Battleship.Core.Game;
 
@@ -44,25 +45,27 @@ public class GameEngine
     {
         var coordinates = _input.GetCoordinatesFromUser();
         var shotResult = RegisterShot(coordinates);
+        
         var shotMessage = shotResult switch
         {
-            { ShotResultEnum: ShotResultEnum.Hit } => "Hit!",
-            { ShotResultEnum: ShotResultEnum.Miss } => "Miss!",
-            { ShotResultEnum: ShotResultEnum.Sunk } => "Sunk!",
-            _ => throw new ArgumentOutOfRangeException("Invalid shot status!"),
+            { IsFailure: true } => shotResult.Error!.Message,
+            { Data.ShotResultEnum: ShotResultEnum.Hit } => "Hit!",
+            { Data.ShotResultEnum: ShotResultEnum.Miss } => "Miss!",
+            { Data.ShotResultEnum: ShotResultEnum.Sunk } => "Sunk!",
+            _ => throw new ArgumentOutOfRangeException(nameof(shotResult.Data.ShotResultEnum), "Unexpected shot status!"),
         };
 
         _output.OutputGameMessage(shotMessage);
         _output.OutputCurrentStateOfBoard(_board);
     }
-
-    private ShotResult RegisterShot(Coordinates coordinates)
+    
+    private Result<ShotResult, GameError> RegisterShot(Coordinates coordinates)
     {
-        var panel = _board.GetPanelAtCoords(coordinates);
-        if (panel is null)
-            throw new Exception();
+        var panelResult = _board.GetPanelAtCoords(coordinates);
         
-        return panel.RegisterShot();
+        return panelResult.IsSuccess 
+            ? Result<ShotResult, GameError>.Success(panelResult.Data!.RegisterShot()) 
+            : Result<ShotResult, GameError>.Failure(panelResult.Error!);
     }
 
     private void InitGameObjects()
@@ -77,8 +80,8 @@ public class GameEngine
         _ships.AddRange(new Ship[]
         {
             new Models.Battleship(),
-            new Destroyer(),
-            new Destroyer(),
+            //new Destroyer(),
+            //new Destroyer(),
         });
     }
 

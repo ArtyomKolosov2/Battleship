@@ -19,7 +19,7 @@ public class Panel
         Coordinates = new Coordinates(row, column);
     }
 
-    public void AddShip(Ship ship)
+    internal void AddShip(Ship ship)
     {
         if (IsOccupiedByShip)
             return;
@@ -27,7 +27,7 @@ public class Panel
         _ship = ship;
     }
 
-    public ShotResult RegisterShot()
+    internal ShotResult RegisterShot()
     {
         if (IsOccupiedByShip)
         {

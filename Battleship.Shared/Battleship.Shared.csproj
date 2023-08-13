@@ -6,31 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-
-
-
-
-
-
-
-    <ItemGroup>
-      <ProjectReference Include="..\Battleship.Shared\Battleship.Shared.csproj" />
-    </ItemGroup>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </Project>

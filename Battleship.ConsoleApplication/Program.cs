@@ -6,8 +6,8 @@ public static class Program
 {
     public static void Main()
     {
-        var game = new GameEngine(new BattleshipConsoleInput(), new BattleshipConsoleOutput());
-        game.StartGame();
+        var engine = new GameEngine(new BattleshipConsoleInput(), new BattleshipConsoleOutput());
+        engine.StartGame();
     }
 }
 

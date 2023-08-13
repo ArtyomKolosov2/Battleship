@@ -1,11 +1,14 @@
 ﻿using System.Collections;
+using Battleship.Core.Exceptions;
 using Battleship.Core.Models.Abstractions;
 using Battleship.Core.ValueObjects;
+using Battleship.Core.ValueObjects.Error;
 using Battleship.Core.ValueObjects.Panel;
+using Battleship.Shared;
 
 namespace Battleship.Core.Game;
 
-public class Board : IEnumerable<Panel>
+public class Board : IBoard
 {
     public const int MaxRows = 10;
     public const int MaxColumns = 10;
@@ -24,6 +27,7 @@ public class Board : IEnumerable<Panel>
 
     internal void AddShipsToBoard(IReadOnlyCollection<Ship> ships)
     {
+        var randomizer = new Random(Guid.NewGuid().GetHashCode());
         var firstShip = ships.First();
         var counter = 0;
         
@@ -36,12 +40,16 @@ public class Board : IEnumerable<Panel>
         }
     }
 
-    internal Panel? GetPanelAtCoords(Coordinates coordinates)
+    internal Result<Panel, GameError> GetPanelAtCoords(Coordinates coordinates)
     {
         if (!_panels.Any())
-            return null;
+            throw new PanelNotInitializedException("Panels must be initialized on the board.");
         
-        return _panels.SingleOrDefault(x => x.Coordinates == coordinates);
+        var panel = _panels.SingleOrDefault(x => x.Coordinates == coordinates);
+
+        return panel is not null
+            ? Result<Panel, GameError>.Success(panel)
+            : Result<Panel, GameError>.Failure(GameError.WithMessage("Provided coordinates were invalid."));
     }
 
     public IEnumerator<Panel> GetEnumerator() => _panels.GetEnumerator();
