@@ -19,6 +19,16 @@ public class BattleshipConsoleOutput : IBattleshipOutput
 
         Console.WriteLine();
 
+        PrintBoard(board);
+
+        PrintLettersForBoard();
+
+        Console.WriteLine();
+    }
+
+    private static void PrintBoard(IBoard board)
+    {
+        // ToDo: return array of strings
         var iteratedColumnsCount = 0;
         var rowCount = 1;
         foreach (var panel in board)
@@ -33,21 +43,17 @@ public class BattleshipConsoleOutput : IBattleshipOutput
                 PanelStatus.Default => "•",
                 _ => throw new ArgumentOutOfRangeException(nameof(panel.Status), "Unexpected status value.")
             };
-            
+
             Console.Write($"{output} ");
             iteratedColumnsCount++;
-            if (iteratedColumnsCount % Board.MaxColumns != 0) 
+            if (iteratedColumnsCount % Board.MaxColumns != 0)
                 continue;
-            
+
             Console.Write($" {rowCount}");
             Console.WriteLine();
             rowCount++;
             iteratedColumnsCount %= Board.MaxColumns;
         }
-        
-        PrintLettersForBoard();
-
-        Console.WriteLine();
     }
 
     private static void PrintLettersForBoard()
