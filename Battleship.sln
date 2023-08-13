@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship.Core", "Battleship.Core\Battleship.Core.csproj", "{A5D4B0EC-8929-4185-9FDB-4C734FB1293E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship.ConsoleApplication", "Battleship.ConsoleApplication\Battleship.ConsoleApplication.csproj", "{EA5109C6-2C79-4BB9-9D04-F83DDDB663EA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{11C6A963-15C3-494F-A612-C3B99CCDD1D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleships.Tests", "Tests\Battleships.Tests\Battleships.Tests.csproj", "{75B5DB1F-C1B6-4296-A825-2350A87B7A8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A5D4B0EC-8929-4185-9FDB-4C734FB1293E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5D4B0EC-8929-4185-9FDB-4C734FB1293E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5D4B0EC-8929-4185-9FDB-4C734FB1293E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5D4B0EC-8929-4185-9FDB-4C734FB1293E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA5109C6-2C79-4BB9-9D04-F83DDDB663EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA5109C6-2C79-4BB9-9D04-F83DDDB663EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA5109C6-2C79-4BB9-9D04-F83DDDB663EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA5109C6-2C79-4BB9-9D04-F83DDDB663EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75B5DB1F-C1B6-4296-A825-2350A87B7A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75B5DB1F-C1B6-4296-A825-2350A87B7A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75B5DB1F-C1B6-4296-A825-2350A87B7A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75B5DB1F-C1B6-4296-A825-2350A87B7A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{75B5DB1F-C1B6-4296-A825-2350A87B7A8C} = {11C6A963-15C3-494F-A612-C3B99CCDD1D1}
+	EndGlobalSection
+EndGlobal
