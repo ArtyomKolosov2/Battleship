@@ -1,7 +1,4 @@
-﻿using Battleship.Core.Game;
-using Battleship.Core.Game.Services;
-using Battleship.Core.Models.Abstractions;
-using Battleship.Core.ValueObjects;
+﻿using Battleship.Core.Models.Abstractions;
 
 namespace Battleship.Tests.FakeObjects;
 
