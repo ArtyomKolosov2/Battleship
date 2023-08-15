@@ -62,7 +62,7 @@ public class ShipPositionGeneratorTests
             action.Should().NotThrow();
         
             var boardPanels = board.GetType().GetField(BoardInternalPanelsFieldName, BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(board) as Panel[,];
-            boardPanels.Should().NotBeNull("If not found then private field is renamed or it's type was changed");
+            boardPanels.Should().NotBeNull("If not found then private field is renamed or it's type changed");
 
             foreach (var ship in ships)
             {

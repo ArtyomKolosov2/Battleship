@@ -8,7 +8,7 @@ public class FakeBattleshipOutput : IBattleshipOutput
 {
     public Queue<string> MessageQueue { get; init; } = new();
     
-    public void OutputCurrentStateOfBoard(IBoardViewModel boardViewModel)
+    public void OutputCurrentStateOfBoard(IBoardViewModelProvider boardViewModelProvider)
     {
     }
 

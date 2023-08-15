@@ -13,35 +13,34 @@ public class BattleshipConsoleOutput : IBattleshipOutput
         Console.OutputEncoding = Encoding.UTF8; 
     }
     
-    public void OutputCurrentStateOfBoard(IBoardViewModel boardViewModel)
+    public void OutputCurrentStateOfBoard(IBoardViewModelProvider boardViewModelProvider)
     {
         var stringBuilder = new StringBuilder();
         
         AddLettersForBoard(stringBuilder);
-        AddBoardRepresentation(boardViewModel, stringBuilder);
+        AddBoardRepresentation(boardViewModelProvider, stringBuilder);
         AddLettersForBoard(stringBuilder);
 
         Console.WriteLine(stringBuilder.ToString());
     }
 
-    private static void AddBoardRepresentation(IBoardViewModel boardViewModel, StringBuilder stringBuilder)
+    private static void AddBoardRepresentation(IBoardViewModelProvider boardViewModelProvider, StringBuilder stringBuilder)
     {
-        var panels = boardViewModel.GetBoardPanelsViewModels();
+        var panels = boardViewModelProvider.GetBoardPanelsViewModels();
         
-        var panelRepresentation = panels.Select(row => row.Select(panel => panel switch
-        {
-            { StatusValue: PanelStatusValue.Hit } => "✕",
-            { StatusValue: PanelStatusValue.Miss } => "+",
-            { StatusValue: PanelStatusValue.Empty } => "•",
-            _ => throw new ArgumentOutOfRangeException(nameof(panel.StatusValue), "Unexpected status value.")
-        })).ToArray();
+        var panelRepresentation = ConvertPanelsToStringRepresentation(panels);
 
+        AddBoardGridFromPanelsRepresentation(stringBuilder, panelRepresentation);
+    }
+
+    private static void AddBoardGridFromPanelsRepresentation(StringBuilder stringBuilder, IEnumerable<IEnumerable<string>> panelRepresentation)
+    {
         var rowCount = 1;
         foreach (var row in panelRepresentation)
         {
             var spaceCount = 1 - rowCount / 10;
             stringBuilder.Append($"{rowCount}{new string(' ', spaceCount)}");
-            
+
             foreach (var panel in row)
             {
                 stringBuilder.Append($" {panel}");
@@ -51,6 +50,17 @@ public class BattleshipConsoleOutput : IBattleshipOutput
             rowCount++;
             stringBuilder.AppendLine();
         }
+    }
+
+    private static IEnumerable<IEnumerable<string>> ConvertPanelsToStringRepresentation(IEnumerable<IEnumerable<PanelViewModel>> panels)
+    {
+        return panels.Select(row => row.Select(panel => panel switch
+        {
+            { StatusValue: PanelStatusValue.Hit } => "X",
+            { StatusValue: PanelStatusValue.Miss } => "+",
+            { StatusValue: PanelStatusValue.Empty } => "•",
+            _ => throw new ArgumentOutOfRangeException(nameof(panel.StatusValue), "Unexpected status value.")
+        })).ToArray();
     }
 
     private static void AddLettersForBoard(StringBuilder stringBuilder)

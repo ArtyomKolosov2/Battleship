@@ -2,7 +2,7 @@
 
 namespace Battleship.Core.Game;
 
-public interface IBoardViewModel
+public interface IBoardViewModelProvider
 {
     IEnumerable<IEnumerable<PanelViewModel>> GetBoardPanelsViewModels();
 }

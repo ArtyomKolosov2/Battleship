@@ -7,7 +7,7 @@ using Battleship.Shared;
 
 namespace Battleship.Core.Game;
 
-public class Board : IBoardViewModel
+public class Board : IBoardViewModelProvider
 {
     public const int MaxRows = 10;
     public const int MaxColumns = 10;
