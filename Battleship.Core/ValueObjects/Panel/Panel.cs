@@ -8,7 +8,7 @@ public class Panel
 {
     private Ship? _ship;
     
-    public PanelStatus Status { get; private set; }
+    public PanelStatusValue StatusValue { get; private set; }
 
     public Coordinates Coordinates { get; }
     
@@ -31,18 +31,18 @@ public class Panel
     {
         if (IsOccupiedByShip)
         {
-            Status = PanelStatus.Hit;
+            StatusValue = PanelStatusValue.Hit;
             _ship!.AddHit();
         }
         else
-            Status = PanelStatus.Miss;
+            StatusValue = PanelStatusValue.Miss;
 
-        return Status switch
+        return StatusValue switch
         {
-            PanelStatus.Hit when _ship!.IsDestroyed => ShotResult.CreateSunk(Coordinates, _ship),
-            PanelStatus.Hit => ShotResult.CreateHit(Coordinates, _ship),
-            PanelStatus.Miss => ShotResult.CreateMiss(Coordinates),
-            _ => throw new ArgumentOutOfRangeException(nameof(Status), "Unexpected panel state!")
+            PanelStatusValue.Hit when _ship!.IsDestroyed => ShotResult.CreateSunk(Coordinates, _ship),
+            PanelStatusValue.Hit => ShotResult.CreateHit(Coordinates, _ship),
+            PanelStatusValue.Miss => ShotResult.CreateMiss(Coordinates),
+            _ => throw new ArgumentOutOfRangeException(nameof(StatusValue), $"Unexpected panel state.")
         };
     }
 }

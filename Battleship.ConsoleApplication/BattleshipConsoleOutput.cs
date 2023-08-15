@@ -26,23 +26,36 @@ public class BattleshipConsoleOutput : IBattleshipOutput
         Console.WriteLine();
     }
 
-    private static void PrintBoard(IBoard board)
+    private static IEnumerable<IEnumerable<string>> PrintBoard(IBoard board)
     {
-        // ToDo: return array of strings
+        var messageBuffList = new List<List<string>>();
         var iteratedColumnsCount = 0;
         var rowCount = 1;
-        foreach (var panel in board)
+        var panels = board.GetPanels();
+        
+        var panelRepresentation = panels.Select(row => row.Select(panel => panel.StatusValue switch
+        {
+            PanelStatusValue.Hit => "✕",
+            PanelStatusValue.Miss => "*",
+            PanelStatusValue.Default => "•",
+            _ => throw new ArgumentOutOfRangeException(nameof(panel.StatusValue), "Unexpected status value.")
+        }));
+        
+        /*foreach (var panel in board)
         {
             if (iteratedColumnsCount == 0)
                 Console.Write($"{rowCount}  ");
 
-            var output = panel.Status switch
+            var output = panel.StatusValue switch
             {
-                PanelStatus.Hit => "✕",
-                PanelStatus.Miss => "*",
-                PanelStatus.Default => "•",
-                _ => throw new ArgumentOutOfRangeException(nameof(panel.Status), "Unexpected status value.")
+                PanelStatusValue.Hit => "✕",
+                PanelStatusValue.Miss => "*",
+                PanelStatusValue.Default => "•",
+                _ => throw new ArgumentOutOfRangeException(nameof(panel.StatusValue), "Unexpected status value.")
             };
+
+            if (panel.IsOccupiedByShip)
+                output = "+";
 
             Console.Write($"{output} ");
             iteratedColumnsCount++;
@@ -53,7 +66,7 @@ public class BattleshipConsoleOutput : IBattleshipOutput
             Console.WriteLine();
             rowCount++;
             iteratedColumnsCount %= Board.MaxColumns;
-        }
+        }*/
     }
 
     private static void PrintLettersForBoard()

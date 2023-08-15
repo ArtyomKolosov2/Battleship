@@ -1,6 +1,6 @@
 ﻿namespace Battleship.Core.ValueObjects.Panel;
 
-public enum PanelStatus
+public enum PanelStatusValue
 {
     Default = 0,
     Miss = 1,

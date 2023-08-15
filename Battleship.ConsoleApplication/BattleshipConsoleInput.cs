@@ -53,7 +53,7 @@ public class BattleshipConsoleInput : IBattleshipInput
         return rowValue switch
         {
             > 10 => Result<Coordinates, string>.Failure("Row number exceeds max allowed rows."),
-            < 0 => Result<Coordinates, string>.Failure("Row number is under first row."),
+            < 0 => Result<Coordinates, string>.Failure("Row number is under min first row."),
             _ => Result<Coordinates, string>.Success(new Coordinates(rowValue, column))
         };
     }

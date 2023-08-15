@@ -6,7 +6,7 @@ public class Battleship : Ship
 {
     private const int BattleshipSize = 5;
     
-    public Battleship() : base(BattleshipSize)
+    public Battleship() : base(BattleshipSize, "Battleship")
     {
     }
 }

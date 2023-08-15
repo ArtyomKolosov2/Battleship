@@ -6,11 +6,14 @@ public abstract class Ship
 {
     private int _hitCount;
     
+    public NotEmptyString Name { get; }
+    
     public PositiveNumber Size { get; init; }
     
-    protected Ship(PositiveNumber size)
+    protected Ship(PositiveNumber size, NotEmptyString name)
     {
         Size = size;
+        Name = name;
     }
 
     public void AddHit()

@@ -2,6 +2,7 @@
 
 namespace Battleship.Core.Game;
 
-public interface IBoard : IEnumerable<Panel>
+public interface IBoard
 {
+    IEnumerable<IEnumerable<Panel>> GetPanels();
 }

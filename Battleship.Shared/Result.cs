@@ -31,5 +31,5 @@ public struct Result<TSuccess, TError>
     public static implicit operator TSuccess(Result<TSuccess, TError> param) =>
         (param.IsSuccess
             ? param.Data
-            : throw new InvalidOperationException("Invalid state of result. Cast isn't possible."))!;
+            : throw new InvalidOperationException("Invalid state of the result. Cast isn't possible."))!;
 }

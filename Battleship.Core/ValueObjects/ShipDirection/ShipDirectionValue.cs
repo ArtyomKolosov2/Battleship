@@ -1,6 +1,6 @@
 ﻿namespace Battleship.Core.ValueObjects.ShipDirection;
 
-public enum ShipDirectionUnit
+public enum ShipDirectionValue
 {
     Default = 0,
     Left = 1,

@@ -6,7 +6,7 @@ public class Destroyer : Ship
 {
     private const int DestroyerSize = 4;
     
-    public Destroyer() : base(DestroyerSize)
+    public Destroyer() : base(DestroyerSize, "Destroyer")
     {
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Battleship.Core.ValueObjects.Shot;
 
-public enum ShotResultEnum
+public enum ShotResultValue
 {
     Miss = 0,
     Hit = 1,

@@ -1,4 +1,5 @@
 ﻿using Battleship.Core.Input;
+using Battleship.Core.Models;
 using Battleship.Core.Models.Abstractions;
 using Battleship.Core.Output;
 using Battleship.Core.ValueObjects;
@@ -38,7 +39,7 @@ public class GameEngine
         while (!AllShipsAreDestroyed)
             PlayRound();
         
-        _output.OutputGameMessage("Win!");
+        _output.OutputGameMessage("All ships are destroyed! You won!");
     }
 
     private void PlayRound()
@@ -49,10 +50,10 @@ public class GameEngine
         var shotMessage = shotResult switch
         {
             { IsFailure: true } => shotResult.Error!.Message,
-            { Data.ShotResultEnum: ShotResultEnum.Hit } => "Hit!",
-            { Data.ShotResultEnum: ShotResultEnum.Miss } => "Miss!",
-            { Data.ShotResultEnum: ShotResultEnum.Sunk } => "Sunk!",
-            _ => throw new ArgumentOutOfRangeException(nameof(shotResult.Data.ShotResultEnum), "Unexpected shot status!"),
+            { Data.ShotResultValue: ShotResultValue.Hit } => $"Hit, {shotResult.Data!.Ship!.Name}!",
+            { Data.ShotResultValue: ShotResultValue.Miss } => "Miss!",
+            { Data.ShotResultValue: ShotResultValue.Sunk } => $"Sunk, {shotResult.Data!.Ship!.Name}!",
+            _ => throw new ArgumentOutOfRangeException(nameof(shotResult.Data.ShotResultValue), "Unexpected shot status!"),
         };
 
         _output.OutputGameMessage(shotMessage);
@@ -80,8 +81,8 @@ public class GameEngine
         _ships.AddRange(new Ship[]
         {
             new Models.Battleship(),
-            //new Destroyer(),
-            //new Destroyer(),
+            new Destroyer(),
+            new Destroyer(),
         });
     }
 
