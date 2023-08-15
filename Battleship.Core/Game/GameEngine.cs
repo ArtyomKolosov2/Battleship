@@ -1,5 +1,5 @@
-﻿using Battleship.Core.Input;
-using Battleship.Core.Models;
+﻿using Battleship.Core.Game.Services;
+using Battleship.Core.Input;
 using Battleship.Core.Models.Abstractions;
 using Battleship.Core.Output;
 using Battleship.Core.ValueObjects.Shot;
@@ -10,14 +10,18 @@ public class GameEngine
 {
     private readonly IBattleshipInput _input;
     private readonly IBattleshipOutput _output;
-    private readonly Board _board;
+    private readonly IShipPositionGenerator _shipPositionGenerator;
+    private readonly IShipFactory _shipFactory;
+    private readonly Board.Board _board;
     private readonly List<Ship> _ships;
 
-    public GameEngine(IBattleshipInput input, IBattleshipOutput output)
+    public GameEngine(IBattleshipInput input, IBattleshipOutput output, IShipPositionGenerator shipPositionGenerator, IShipFactory shipFactory)
     {
         _input = input;
         _output = output;
-        _board = new Board();
+        _shipPositionGenerator = shipPositionGenerator;
+        _shipFactory = shipFactory;
+        _board = new Board.Board();
         _ships = new List<Ship>();
     }
     
@@ -60,19 +64,10 @@ public class GameEngine
     private void InitGameObjects()
     {
         _board.InitBoard();
-        CreateShips();
-        ShipPositionGenerator.AddShipsToBoard(_board, _ships);
+         _ships.AddRange(_shipFactory.BuildShips());
+        _shipPositionGenerator.AddShipsToBoard(_board, _ships);
     }
-
-    private void CreateShips()
-    {
-        _ships.AddRange(new Ship[]
-        {
-            new Models.Battleship(),
-            new Destroyer(),
-            new Destroyer(),
-        });
-    }
-
+    
     private bool AllShipsAreDestroyed => _ships.All(x => x.IsDestroyed);
 }
+

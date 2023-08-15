@@ -5,13 +5,14 @@ using Battleship.Core.ValueObjects.Panel;
 using Battleship.Core.ValueObjects.Shot;
 using Battleship.Shared;
 
-namespace Battleship.Core.Game;
+namespace Battleship.Core.Game.Board;
 
 public class Board : IBoardViewModel
 {
     public const int MaxRows = 10;
     public const int MaxColumns = 10;
 
+    private readonly HashSet<Coordinates> _hits = new();
     private readonly Panel[,] _panels = new Panel[MaxRows, MaxColumns];
     
     internal void InitBoard()
@@ -36,11 +37,17 @@ public class Board : IBoardViewModel
     
     internal Result<ShotResult, GameError> RegisterShot(Coordinates coordinates)
     {
+        if (_hits.Contains(coordinates))
+            return Result<ShotResult, GameError>.Failure(GameError.WithMessage("Cannot register hit on coordinates. It was already hit."));
+        
         var panelResult = GetPanelAtCoords(coordinates);
         
-        return panelResult.IsSuccess 
-            ? Result<ShotResult, GameError>.Success(panelResult.Data!.RegisterShot()) 
-            : Result<ShotResult, GameError>.Failure(panelResult.Error!);
+        if (!panelResult.IsSuccess) 
+            return Result<ShotResult, GameError>.Failure(panelResult.Error!);
+        
+        _hits.Add(coordinates);
+        return Result<ShotResult, GameError>.Success(panelResult.Data!.RegisterShot());
+
     }
 
     public IEnumerable<IEnumerable<PanelViewModel>> GetBoardPanelsViewModels()

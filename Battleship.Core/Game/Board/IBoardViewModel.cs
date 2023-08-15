@@ -1,6 +1,6 @@
 ﻿using Battleship.Core.ValueObjects.Panel;
 
-namespace Battleship.Core.Game;
+namespace Battleship.Core.Game.Board;
 
 public interface IBoardViewModel
 {
