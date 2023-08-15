@@ -53,7 +53,7 @@ public class ShipPositionGenerator : IShipPositionGenerator
             if (!result.IsSome(out var coordinates))
                 return Option<List<Panel>>.None;
             
-            var panelResult = board.GetPanelAtCoords(currentShipCoordinates);
+            var panelResult = board.GetPanelAtCoordinates(currentShipCoordinates);
             
             if (panelResult.IsSuccess && !panelResult.Data!.IsOccupiedByShip)
                 panelsToPlaceShip.Add(panelResult.Data);

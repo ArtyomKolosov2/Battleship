@@ -24,7 +24,7 @@ internal class FakeShipPositionGenerator : IShipPositionGenerator
                 .Select(column => new Coordinates(row, column));
 
             foreach (var coordinates in coordinatesForFirstRow)
-                board.GetPanelAtCoords(coordinates).Data!.AddShip(ship);
+                board.GetPanelAtCoordinates(coordinates).Data!.AddShip(ship);
 
             row++;
         }

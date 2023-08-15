@@ -82,23 +82,23 @@ public class BoardTests
 
         var secondRegisterShotInResult = board.RegisterShot(targetCoordinates);
         secondRegisterShotInResult.IsFailure.Should().BeTrue();
-        secondRegisterShotInResult.Error!.Message.Should().Be("Cannot register hit on coordinates. It was already hit.");
+        secondRegisterShotInResult.Error!.Message.Should().Be("Cannot register shot on coordinates. It was already shot.");
     }
 
     [Fact]
-    public void GetPanelAtCoords_BoardNotInitialized_ExceptionThrown()
+    public void GetPanelAtCoordinates_BoardNotInitialized_ExceptionThrown()
     {
         // Arrange
         var board = new Board();
         var targetCoordinates = new Coordinates(1, 1);
 
         // Act & Assert
-        var action = () => board.GetPanelAtCoords(targetCoordinates);
+        var action = () => board.GetPanelAtCoordinates(targetCoordinates);
         action.Should().Throw<BoardNotInitializedException>().WithMessage("Panels must be initialized on the board.");
     }
 
     [Fact]
-    public void GetPanelAtCoords_BoardInitialized_PanelWithStandardStateReturned()
+    public void GetPanelAtCoordinates_BoardInitialized_PanelWithStandardStateReturned()
     {
         // Arrange
         var board = new Board();
@@ -106,7 +106,7 @@ public class BoardTests
         var targetCoordinates = new Coordinates(1, 1);
 
         // Act & Assert
-        var getResult = board.GetPanelAtCoords(targetCoordinates);
+        var getResult = board.GetPanelAtCoordinates(targetCoordinates);
         getResult.IsSuccess.Should().BeTrue();
 
         getResult.Data!.Coordinates.Should().Be(targetCoordinates);
@@ -115,7 +115,7 @@ public class BoardTests
     }
 
     [Fact]
-    public void GetPanelAtCoords_BoardInitializedAndOneShipIsPlaced_PanelWithStateWithShipReturned()
+    public void GetPanelAtCoordinates_BoardInitializedAndOneShipIsPlaced_PanelWithStateWithShipReturned()
     {
         // Arrange
         var fakePositionGenerator = new FakeShipPositionGenerator();
@@ -126,7 +126,7 @@ public class BoardTests
         var targetCoordinates = new Coordinates(0, 0);
 
         // Act & Assert
-        var getResult = board.GetPanelAtCoords(targetCoordinates);
+        var getResult = board.GetPanelAtCoordinates(targetCoordinates);
         getResult.IsSuccess.Should().BeTrue();
 
         getResult.Data!.Coordinates.Should().Be(targetCoordinates);

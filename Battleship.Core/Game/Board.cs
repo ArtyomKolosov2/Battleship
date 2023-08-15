@@ -12,7 +12,7 @@ public class Board : IBoardViewModelProvider
     public const int MaxRows = 10;
     public const int MaxColumns = 10;
 
-    private readonly HashSet<Coordinates> _hits = new();
+    private readonly HashSet<Coordinates> _shots = new();
     private readonly Panel[,] _panels = new Panel[MaxRows, MaxColumns];
     
     internal void InitBoard()
@@ -25,7 +25,7 @@ public class Board : IBoardViewModelProvider
                 _panels[row, column] = new Panel(row, column);
     }
     
-    internal Result<Panel, GameError> GetPanelAtCoords(Coordinates coordinates)
+    internal Result<Panel, GameError> GetPanelAtCoordinates(Coordinates coordinates)
     {
         if (_panels.Cast<Panel>().Any(x => x is null))
             BoardNotInitializedException.Throw();
@@ -37,15 +37,15 @@ public class Board : IBoardViewModelProvider
     
     internal Result<ShotResult, GameError> RegisterShot(Coordinates coordinates)
     {
-        if (_hits.Contains(coordinates))
-            return Result<ShotResult, GameError>.Failure(GameError.WithMessage("Cannot register hit on coordinates. It was already hit."));
+        if (_shots.Contains(coordinates))
+            return Result<ShotResult, GameError>.Failure(GameError.WithMessage("Cannot register shot on coordinates. It was already shot."));
         
-        var panelResult = GetPanelAtCoords(coordinates);
+        var panelResult = GetPanelAtCoordinates(coordinates);
         
         if (!panelResult.IsSuccess) 
             return Result<ShotResult, GameError>.Failure(panelResult.Error!);
         
-        _hits.Add(coordinates);
+        _shots.Add(coordinates);
         return Result<ShotResult, GameError>.Success(panelResult.Data!.RegisterShot());
 
     }
