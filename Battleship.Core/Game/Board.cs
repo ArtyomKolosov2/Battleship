@@ -5,7 +5,7 @@ using Battleship.Core.ValueObjects.Panel;
 using Battleship.Core.ValueObjects.Shot;
 using Battleship.Shared;
 
-namespace Battleship.Core.Game.Board;
+namespace Battleship.Core.Game;
 
 public class Board : IBoardViewModel
 {
@@ -18,7 +18,7 @@ public class Board : IBoardViewModel
     internal void InitBoard()
     {
         if (_panels.Cast<Panel>().Any(x => x is not null))
-            return;
+            BoardAlreadyInitializedException.Throw();
             
         for (var row = 0; row < MaxRows; row++)
             for (var column = 0; column < MaxColumns; column++)
@@ -28,7 +28,7 @@ public class Board : IBoardViewModel
     internal Result<Panel, GameError> GetPanelAtCoords(Coordinates coordinates)
     {
         if (_panels.Cast<Panel>().Any(x => x is null))
-            PanelNotInitializedException.Throw();
+            BoardNotInitializedException.Throw();
 
         return _panels.GetValue(coordinates.Row, coordinates.Column) is Panel panel
             ? Result<Panel, GameError>.Success(panel)
@@ -52,6 +52,9 @@ public class Board : IBoardViewModel
 
     public IEnumerable<IEnumerable<PanelViewModel>> GetBoardPanelsViewModels()
     {
+        if (_panels.Cast<Panel>().Any(x => x is null))
+            BoardNotInitializedException.Throw();
+        
         var rowCount = _panels.GetLength(0);
         var colCount = _panels.GetLength(1);
 

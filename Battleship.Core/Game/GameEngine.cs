@@ -12,7 +12,7 @@ public class GameEngine
     private readonly IBattleshipOutput _output;
     private readonly IShipPositionGenerator _shipPositionGenerator;
     private readonly IShipFactory _shipFactory;
-    private readonly Board.Board _board;
+    private readonly Board _board;
     private readonly List<Ship> _ships;
 
     public GameEngine(IBattleshipInput input, IBattleshipOutput output, IShipPositionGenerator shipPositionGenerator, IShipFactory shipFactory)
@@ -21,7 +21,7 @@ public class GameEngine
         _output = output;
         _shipPositionGenerator = shipPositionGenerator;
         _shipFactory = shipFactory;
-        _board = new Board.Board();
+        _board = new Board();
         _ships = new List<Ship>();
     }
     

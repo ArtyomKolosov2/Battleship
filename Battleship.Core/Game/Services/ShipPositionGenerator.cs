@@ -9,14 +9,14 @@ namespace Battleship.Core.Game.Services;
 
 public class ShipPositionGenerator : IShipPositionGenerator 
 {
-    public void AddShipsToBoard(Board.Board board, IEnumerable<Ship> ships)
+    public void AddShipsToBoard(Board board, IEnumerable<Ship> ships)
     {
         var randomizer = new Random(Guid.NewGuid().GetHashCode());
         foreach (var ship in ships)
             PlaceShipAtRandomSpot(board, randomizer, ship);
     }
 
-    private static void PlaceShipAtRandomSpot(Board.Board board, Random randomizer, Ship ship)
+    private static void PlaceShipAtRandomSpot(Board board, Random randomizer, Ship ship)
     {
         const int maxPlacementsAttempts = 100; 
         
@@ -41,9 +41,9 @@ public class ShipPositionGenerator : IShipPositionGenerator
         }
     }
 
-    private static Coordinates GetRandomStartCoordinates(Random randomizer) => new(randomizer.Next(0, Board.Board.MaxRows), randomizer.Next(0, Board.Board.MaxColumns));
+    private static Coordinates GetRandomStartCoordinates(Random randomizer) => new(randomizer.Next(0, Board.MaxRows), randomizer.Next(0, Board.MaxColumns));
 
-    private static Option<List<Panel>> TryGetPanelsToPlaceShip(Board.Board board, ShipDirectionValue direction, Coordinates currentShipCoordinates, Ship ship)
+    private static Option<List<Panel>> TryGetPanelsToPlaceShip(Board board, ShipDirectionValue direction, Coordinates currentShipCoordinates, Ship ship)
     {
         var panelsToPlaceShip = new List<Panel>();
         for (var i = 0; i < ship.Size; i++)
@@ -81,7 +81,7 @@ public class ShipPositionGenerator : IShipPositionGenerator
 
         return nextCoordinates switch
         {
-            { column: < 0 or >= Board.Board.MaxRows } or { row: < 0 or >= Board.Board.MaxColumns } => Option<Coordinates>.None,
+            { column: < 0 or >= Board.MaxRows } or { row: < 0 or >= Board.MaxColumns } => Option<Coordinates>.None,
             _ => Option<Coordinates>.Some(new Coordinates(nextCoordinates.row, nextCoordinates.column))
         };
     }

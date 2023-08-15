@@ -6,11 +6,11 @@ public record ShotResult
 {
     public ShotResultValue ShotResultValue { get; }
     public Ship? Ship { get; }
-    public Coordinates Coordinate { get; }
+    public Coordinates Coordinates { get; }
 
     private ShotResult(Coordinates coordinates, ShotResultValue shotResultValue, Ship? ship = null)
     {
-        Coordinate = coordinates;
+        Coordinates = coordinates;
         ShotResultValue = shotResultValue;
         Ship = ship;
     }

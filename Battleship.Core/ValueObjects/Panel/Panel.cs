@@ -6,13 +6,13 @@ namespace Battleship.Core.ValueObjects.Panel;
 
 internal class Panel
 {
-    private Ship? _ship;
+    internal Ship? Ship { get; private set; }
     
     public PanelStatusValue StatusValue { get; private set; }
 
     public Coordinates Coordinates { get; }
     
-    public bool IsOccupiedByShip => _ship is not null;
+    public bool IsOccupiedByShip => Ship is not null;
     
     public Panel(NonNegativeNumber row, NonNegativeNumber column)
     {
@@ -24,7 +24,7 @@ internal class Panel
         if (IsOccupiedByShip)
             return;
 
-        _ship = ship;
+        Ship = ship;
     }
 
     internal ShotResult RegisterShot()
@@ -32,15 +32,15 @@ internal class Panel
         if (IsOccupiedByShip)
         {
             StatusValue = PanelStatusValue.Hit;
-            _ship!.AddHit();
+            Ship!.AddHit();
         }
         else
             StatusValue = PanelStatusValue.Miss;
 
         return StatusValue switch
         {
-            PanelStatusValue.Hit when _ship!.IsDestroyed => ShotResult.CreateSunk(Coordinates, _ship),
-            PanelStatusValue.Hit => ShotResult.CreateHit(Coordinates, _ship),
+            PanelStatusValue.Hit when Ship!.IsDestroyed => ShotResult.CreateSunk(Coordinates, Ship),
+            PanelStatusValue.Hit => ShotResult.CreateHit(Coordinates, Ship),
             PanelStatusValue.Miss => ShotResult.CreateMiss(Coordinates),
             _ => throw new ArgumentOutOfRangeException(nameof(StatusValue), $"Unexpected panel state.")
         };

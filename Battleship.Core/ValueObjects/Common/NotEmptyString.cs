@@ -6,7 +6,7 @@ namespace Battleship.Core.ValueObjects.Common
     {
         public NotEmptyString(string value)
         {
-            Value = string.IsNullOrEmpty(value) ? throw new ValueObjectException<NotEmptyString>("String can't be null or empty") : value;
+            Value = string.IsNullOrWhiteSpace(value) ? throw new ValueObjectException<NotEmptyString>("String can't be null or empty") : value;
         }
 
         public string Value { get; private set; }
