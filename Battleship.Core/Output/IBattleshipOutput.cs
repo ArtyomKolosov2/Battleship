@@ -7,7 +7,7 @@ namespace Battleship.Core.Output;
 
 public interface IBattleshipOutput
 {
-    void OutputCurrentStateOfBoard(IBoard board);
+    void OutputCurrentStateOfBoard(IBoardViewModel boardViewModel);
 
     void OutputGameMessage(NotEmptyString message);
 }

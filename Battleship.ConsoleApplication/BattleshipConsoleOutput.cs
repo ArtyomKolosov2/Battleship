@@ -13,66 +13,55 @@ public class BattleshipConsoleOutput : IBattleshipOutput
         Console.OutputEncoding = Encoding.UTF8; 
     }
     
-    public void OutputCurrentStateOfBoard(IBoard board)
+    public void OutputCurrentStateOfBoard(IBoardViewModel boardViewModel)
     {
-        PrintLettersForBoard();
+        var stringBuilder = new StringBuilder();
+        
+        AddLettersForBoard(stringBuilder);
+        AddBoardRepresentation(boardViewModel, stringBuilder);
+        AddLettersForBoard(stringBuilder);
 
-        Console.WriteLine();
-
-        PrintBoard(board);
-
-        PrintLettersForBoard();
-
-        Console.WriteLine();
+        Console.WriteLine(stringBuilder.ToString());
     }
 
-    private static IEnumerable<IEnumerable<string>> PrintBoard(IBoard board)
+    private static void AddBoardRepresentation(IBoardViewModel boardViewModel, StringBuilder stringBuilder)
     {
-        var messageBuffList = new List<List<string>>();
-        var iteratedColumnsCount = 0;
-        var rowCount = 1;
-        var panels = board.GetPanels();
+        var panels = boardViewModel.GetBoardPanelsViewModels();
         
-        var panelRepresentation = panels.Select(row => row.Select(panel => panel.StatusValue switch
+        var panelRepresentation = panels.Select(row => row.Select(panel => panel switch
         {
-            PanelStatusValue.Hit => "✕",
-            PanelStatusValue.Miss => "*",
-            PanelStatusValue.Default => "•",
+            { StatusValue: PanelStatusValue.Hit } => "✕",
+            { StatusValue: PanelStatusValue.Miss } => "+",
+            { StatusValue: PanelStatusValue.Default } => "•",
             _ => throw new ArgumentOutOfRangeException(nameof(panel.StatusValue), "Unexpected status value.")
-        }));
-        
-        /*foreach (var panel in board)
+        })).ToArray();
+
+        var rowCount = 1;
+        foreach (var row in panelRepresentation)
         {
-            if (iteratedColumnsCount == 0)
-                Console.Write($"{rowCount}  ");
-
-            var output = panel.StatusValue switch
+            var spaceCount = 1 - rowCount / 10;
+            stringBuilder.Append($"{rowCount}{new string(' ', spaceCount)}");
+            
+            foreach (var panel in row)
             {
-                PanelStatusValue.Hit => "✕",
-                PanelStatusValue.Miss => "*",
-                PanelStatusValue.Default => "•",
-                _ => throw new ArgumentOutOfRangeException(nameof(panel.StatusValue), "Unexpected status value.")
-            };
+                stringBuilder.Append($" {panel}");
+            }
 
-            if (panel.IsOccupiedByShip)
-                output = "+";
-
-            Console.Write($"{output} ");
-            iteratedColumnsCount++;
-            if (iteratedColumnsCount % Board.MaxColumns != 0)
-                continue;
-
-            Console.Write($" {rowCount}");
-            Console.WriteLine();
+            stringBuilder.Append($" {rowCount}");
             rowCount++;
-            iteratedColumnsCount %= Board.MaxColumns;
-        }*/
+            stringBuilder.AppendLine();
+        }
     }
 
-    private static void PrintLettersForBoard()
+    private static void AddLettersForBoard(StringBuilder stringBuilder)
     {
-        for (var i = 'A'; i <= 'J'; i++)
-            Console.Write($" {i}");
+        const int initialSpaceCount = 2;
+        stringBuilder.Append(new string(' ', initialSpaceCount));
+            
+        for (var c = 'A'; c <= 'J'; c++)
+            stringBuilder.Append($" {c}");
+
+        stringBuilder.AppendLine();
     }
 
     public void OutputGameMessage(NotEmptyString message)

@@ -4,7 +4,7 @@ using Battleship.Core.ValueObjects.Shot;
 
 namespace Battleship.Core.ValueObjects.Panel;
 
-public class Panel
+internal class Panel
 {
     private Ship? _ship;
     

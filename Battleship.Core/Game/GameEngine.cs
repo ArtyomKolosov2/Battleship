@@ -2,10 +2,7 @@
 using Battleship.Core.Models;
 using Battleship.Core.Models.Abstractions;
 using Battleship.Core.Output;
-using Battleship.Core.ValueObjects;
-using Battleship.Core.ValueObjects.Error;
 using Battleship.Core.ValueObjects.Shot;
-using Battleship.Shared;
 
 namespace Battleship.Core.Game;
 
@@ -23,8 +20,7 @@ public class GameEngine
         _board = new Board();
         _ships = new List<Ship>();
     }
-
-    // Add game results object
+    
     public void StartGame()
     {
         InitGameObjects();
@@ -45,7 +41,7 @@ public class GameEngine
     private void PlayRound()
     {
         var coordinates = _input.GetCoordinatesFromUser();
-        var shotResult = RegisterShot(coordinates);
+        var shotResult = _board.RegisterShot(coordinates);
         
         var shotMessage = shotResult switch
         {
@@ -60,20 +56,12 @@ public class GameEngine
         _output.OutputCurrentStateOfBoard(_board);
     }
     
-    private Result<ShotResult, GameError> RegisterShot(Coordinates coordinates)
-    {
-        var panelResult = _board.GetPanelAtCoords(coordinates);
-        
-        return panelResult.IsSuccess 
-            ? Result<ShotResult, GameError>.Success(panelResult.Data!.RegisterShot()) 
-            : Result<ShotResult, GameError>.Failure(panelResult.Error!);
-    }
 
     private void InitGameObjects()
     {
         _board.InitBoard();
         CreateShips();
-        _board.AddShipsToBoard(_ships);
+        ShipPositionGenerator.AddShipsToBoard(_ships, _board);
     }
 
     private void CreateShips()
