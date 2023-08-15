@@ -7,16 +7,16 @@ using Battleship.Shared;
 
 namespace Battleship.Core.Game;
 
-internal class ShipPositionGenerator
+internal static class ShipPositionGenerator
 {
-    public static void AddShipsToBoard(IEnumerable<Ship> ships, Board board)
+    public static void AddShipsToBoard(Board board, IEnumerable<Ship> ships)
     {
         var randomizer = new Random(Guid.NewGuid().GetHashCode());
         foreach (var ship in ships)
-            PlaceShipAtRandomSpot(randomizer, ship, board);
+            PlaceShipAtRandomSpot(board, randomizer, ship);
     }
 
-    private static void PlaceShipAtRandomSpot(Random randomizer, Ship ship, Board board)
+    private static void PlaceShipAtRandomSpot(Board board, Random randomizer, Ship ship)
     {
         const int maxPlacementsAttempts = 100; 
         
@@ -30,7 +30,7 @@ internal class ShipPositionGenerator
             var startCoordinates = GetRandomStartCoordinates(randomizer);
             var direction = GetRandomShipDirection(randomizer);
 
-            var getPanelsOption = TryGetPanelsToPlaceShip(ship, direction, startCoordinates, board);
+            var getPanelsOption = TryGetPanelsToPlaceShip(board, direction, startCoordinates, ship);
             
             shipPlacementsAttempts++;
             if (!getPanelsOption.IsSome(out var panelsToPlaceShip))
@@ -43,7 +43,7 @@ internal class ShipPositionGenerator
 
     private static Coordinates GetRandomStartCoordinates(Random randomizer) => new(randomizer.Next(0, Board.MaxRows), randomizer.Next(0, Board.MaxColumns));
 
-    private static Option<List<Panel>> TryGetPanelsToPlaceShip(Ship ship, ShipDirectionValue direction, Coordinates currentShipCoordinates, Board board)
+    private static Option<List<Panel>> TryGetPanelsToPlaceShip(Board board, ShipDirectionValue direction, Coordinates currentShipCoordinates, Ship ship)
     {
         var panelsToPlaceShip = new List<Panel>();
         for (var i = 0; i < ship.Size; i++)

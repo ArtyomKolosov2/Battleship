@@ -2,7 +2,7 @@
 
 public enum PanelStatusValue
 {
-    Default = 0,
+    Empty = 0,
     Miss = 1,
     Hit = 2,
 }

@@ -27,11 +27,11 @@ public class Board : IBoardViewModel
     internal Result<Panel, GameError> GetPanelAtCoords(Coordinates coordinates)
     {
         if (_panels.Cast<Panel>().Any(x => x is null))
-            throw new PanelNotInitializedException("Panels must be initialized on the board.");
+            PanelNotInitializedException.Throw();
 
         return _panels.GetValue(coordinates.Row, coordinates.Column) is Panel panel
             ? Result<Panel, GameError>.Success(panel)
-            : Result<Panel, GameError>.Failure(GameError.WithMessage("Provided coordinates were invalid."));
+            : Result<Panel, GameError>.Failure(GameError.WithMessage("Provided coordinates are invalid."));
     }
     
     internal Result<ShotResult, GameError> RegisterShot(Coordinates coordinates)

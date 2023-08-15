@@ -32,7 +32,7 @@ public class BattleshipConsoleOutput : IBattleshipOutput
         {
             { StatusValue: PanelStatusValue.Hit } => "✕",
             { StatusValue: PanelStatusValue.Miss } => "+",
-            { StatusValue: PanelStatusValue.Default } => "•",
+            { StatusValue: PanelStatusValue.Empty } => "•",
             _ => throw new ArgumentOutOfRangeException(nameof(panel.StatusValue), "Unexpected status value.")
         })).ToArray();
 

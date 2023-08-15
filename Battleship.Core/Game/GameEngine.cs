@@ -61,7 +61,7 @@ public class GameEngine
     {
         _board.InitBoard();
         CreateShips();
-        ShipPositionGenerator.AddShipsToBoard(_ships, _board);
+        ShipPositionGenerator.AddShipsToBoard(_board, _ships);
     }
 
     private void CreateShips()
