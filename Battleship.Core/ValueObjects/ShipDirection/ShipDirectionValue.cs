@@ -2,7 +2,6 @@
 
 public enum ShipDirectionValue
 {
-    Default = 0,
     Left = 1,
     Right = 2,
     Top = 3,
